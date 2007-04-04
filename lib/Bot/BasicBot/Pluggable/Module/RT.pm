@@ -4,7 +4,7 @@ use strict;
 
 use vars qw( @ISA $VERSION );
 @ISA     = qw(Bot::BasicBot::Pluggable::Module);
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 use RT::Client::REST;
 use RT::Client::REST::Ticket;

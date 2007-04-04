@@ -1,19 +1,0 @@
-8
-
-dir
-23
-svn+ssh://dams@82.69.64.73/var/svn/repos/ytk/trunk/rtcurses/Bot-BasicBot-Pluggable-Module-RT-0.01/lib
-svn+ssh://dams@82.69.64.73/var/svn/repos
-
-
-
-2007-04-03T19:59:42.008686Z
-23
-dams
-
-
-svn:special svn:externals svn:needs-lock
-
-Bot
-dir
-
