@@ -4,7 +4,7 @@ use strict;
 
 use vars qw( @ISA $VERSION );
 @ISA     = qw(Bot::BasicBot::Pluggable::Module);
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 use RT::Client::REST;
 use RT::Client::REST::Ticket;
@@ -12,13 +12,15 @@ use RT::Client::REST::Ticket;
 sub init {
     my ($self) = @_;
 
-    # default value for google_key, so it shows up in the list of vars.
+    # default value for vars.
     foreach (qw(user_server user_login user_password)) {
         next if $self->get($_);
         $self->set($_, '** SET ME **')
    }
    defined $self->get('user_output')
        or $self->set('user_output', 'RT %id: %s - %S');
+   defined $self->get('user_regexp')
+       or $self->set('user_regexp', '(?:^|\s)rt\s*#?\s*(\d+)');
 }
 
 my $rt_handler;
@@ -30,7 +32,10 @@ sub told {
 
     my $body = $mess->{body};
 
-    return if $body !~ /RT#?\s*(\d+)/i;
+    my $regexp = $self->get('user_regexp');
+
+    my ($nb) = $body =~ /$regexp/i
+        or return;
 
     if (!$connected) {
         $rt_handler = RT::Client::REST->new(server => $self->get('user_server'));
@@ -41,7 +46,6 @@ sub told {
         $connected = 1;
     }
 
-    my $nb = $1;
     my $ticket = RT::Client::REST::Ticket->new(
         rt  => $rt_handler,
         id  => $nb,
@@ -66,11 +70,7 @@ sub told {
     return $output;
 }
 
-sub help { q(catch anything that looks like an RT number : /RT#?\s*(\d+)/i. it
-requires the RT server url, a login and password. Set them using '!set RT
-server', '!set RT login', '!set RT password'. The information displayed can
-be configured by setting the output string : '!set RT output some_string'. in
-the string, you can use the following placeholders :
+sub help { q(catch anything that looks like an RT number : /RT#?\s*(\d+)/i. it requires the RT server url, a login and password. Set them using '!set RT server', '!set RT login', '!set RT password'. The information displayed can be configured by setting the output string : '!set RT output some_string'. in the string, you can use the following placeholders :
 %i : id of the ticket
 %q : queue of the ticket
 %c : creator of the ticket
@@ -79,6 +79,8 @@ the string, you can use the following placeholders :
 %p : priotity of the ticket
 %C : time where it was created
 Default is : 'RT %i: %s - %S';
+
+The matching can be configured using : '!set RT regexp some_regexp'. The default is (?:^|\s)rt\s*#?\s*(\d+) .
 
 You nee to have the Vars module loaded before setting keys.
 ) }
@@ -144,6 +146,15 @@ the string can contain the following placeholders :
   %C : time where it was created
 
 Default is : 'RT %id: %s - %S';
+
+=item regexp
+
+The regexp that is used to extract the rt number from the body. Set it using:
+
+  !set RT regexp <some_regexp>.
+
+Its first match should be the rt number.
+Default is (?:^|\s)rt\s*#?\s*(\d+)
 
 =back
 
