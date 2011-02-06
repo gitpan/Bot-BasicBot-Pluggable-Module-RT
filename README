@@ -1,37 +1,13 @@
-Bot::BasicBot::Pluggable::Module::RT - IRC frontend to RT::Client::REST
-
-DESCRIPTION
-
-This module uses RT::Client::REST to retrieve informations on Tickets from an
-RT server. It let you get titles, informations and basic status of an RT ticket
-while whatting on IRC.
-
-    < you> bot: RT#12345
-    < bot> 12345 : Bug in the installation script
 
 
-INSTALL
+This archive contains the distribution Bot-BasicBot-Pluggable-Module-RT,
+version 0.20:
 
-To install this module, run the following commands:
+  This is a plugin to access information about RT tickets on IRC
 
-    perl Build.PL
-    ./Build
-    ./Build test
-    ./Build install
+This software is copyright (c) 2011 by Damien "dams" Krotkine.
 
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
-Alternatively, to install with ExtUtils::MakeMaker, you can use the following commands:
-
-    perl Makefile.PL
-    make
-    make test
-    make install
-
-
-COPYRIGHT AND LICENCE
-
-Copyright (C) 2007 Damien 'dams' Krotkine 
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
 

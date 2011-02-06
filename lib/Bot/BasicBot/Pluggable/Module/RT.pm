@@ -1,10 +1,23 @@
-package Bot::BasicBot::Pluggable::Module::RT;
+#
+# This file is part of Bot-BasicBot-Pluggable-Module-RT
+#
+# This software is copyright (c) 2011 by Damien "dams" Krotkine.
+#
+# This is free software; you can redistribute it and/or modify it under
+# the same terms as the Perl 5 programming language system itself.
+#
 
 use strict;
+use warnings;
 
-use vars qw( @ISA $VERSION );
-@ISA     = qw(Bot::BasicBot::Pluggable::Module);
-$VERSION = '0.05';
+package Bot::BasicBot::Pluggable::Module::RT;
+BEGIN {
+  $Bot::BasicBot::Pluggable::Module::RT::VERSION = '0.20';
+}
+
+# ABSTRACT: This is a plugin to access information about RT tickets on IRC
+
+use base qw(Bot::BasicBot::Pluggable::Module);
 
 use RT::Client::REST;
 use RT::Client::REST::Ticket;
@@ -92,11 +105,17 @@ You need to have the Vars module loaded before setting keys.
 
 1;
 
-__END__
+
+
+=pod
 
 =head1 NAME
 
-Bot::BasicBot::Pluggable::Module::RT - Retrieves information of RT tickets
+Bot::BasicBot::Pluggable::Module::RT - This is a plugin to access information about RT tickets on IRC
+
+=head1 VERSION
+
+version 0.20
 
 =head1 SYNOPSIS
 
@@ -107,6 +126,10 @@ Bot::BasicBot::Pluggable::Module::RT - Retrieves information of RT tickets
 
 This module uses RT::Client::REST::Ticket to connect to a RT server and grab
 information on tickets.
+
+=head1 NAME
+
+Bot::BasicBot::Pluggable::Module::RT - Retrieves information of RT tickets
 
 =head1 IRC USAGE
 
@@ -163,6 +186,32 @@ Default is (?:^|\s)rt\s*#?\s*(\d+)
 
 =back
 
+=head1 COMPLETE EXAMPLE
+
+  #!/usr/bin/perl 
+  
+  use strict;
+  use warnings;
+  use Bot::BasicBot::Pluggable;
+  
+  my $bot = Bot::BasicBot::Pluggable->new(
+      server => "server",
+      port   => "6667",
+      channels => ["#bottest"],
+      nick      => "arty",
+      alt_nicks => ["arty_", "_arty"],
+      username  => "RT",
+      name      => "RT Bot",
+      charset => "utf-8", # charset the bot assumes the channel is using
+  );
+  
+  my $rt_module=$bot->load("RT");
+  $rt_module->set(user_server => 'http://rt.yourcompany.com');
+  $rt_module->set(user_login => "user");
+  $rt_module->set(user_password => "password");
+  
+  $bot->run();
+
 =head1 AUTHOR
 
 Damien "dams" Krotkine, C<< <dams@cpan.org> >>
@@ -177,9 +226,24 @@ make changes.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2007 Damien "dams" Krotkine, All Rights Reserved.
+Copyright 2007-2011 Damien "dams" Krotkine, All Rights Reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
+=head1 AUTHOR
+
+Damien "dams" Krotkine
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Damien "dams" Krotkine.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
 =cut
+
+
+__END__
+
